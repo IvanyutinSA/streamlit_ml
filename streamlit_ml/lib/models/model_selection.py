@@ -2,8 +2,8 @@ import streamlit as st
 
 def get_available_models(target_type):
     mls = {
-        'Real': ['KNeighboursRegressor'],
-        'Categorical': ['KNeighboursClassifier'],
+        'Real': ['KNeighborsRegressor'],
+        'Categorical': ['KNeighborsClassifier'],
     }
     return mls.get(target_type, [])
 
@@ -22,8 +22,8 @@ def get_available_model_hyperparameters(model):
 
 def get_hyperparameters():
     grid_parameters = {}
-    n_neighbors = st.text_input('n_neighbours')
-    grid_parameters['estimator__n_neigbors'] = list(map(int, n_neighbors.split(';'))) if n_neighbors else []
+    n_neighbors = st.text_input('n_neighbors')
+    grid_parameters['estimator__n_neighbors'] = list(map(int, n_neighbors.split(';'))) if n_neighbors else []
     grid_parameters['estimator__algorithm'] = st.multiselect('algorithm', ['auto', 'ball_tree', 'kd_tree', 'brute'])
     leaf_size = st.text_input('leaf_size')
     grid_parameters['estimator__leaf_size'] = list(map(int, leaf_size.split(';'))) if leaf_size else []
