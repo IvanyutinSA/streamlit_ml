@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import (
     r2_score, mean_squared_error, mean_absolute_error,
     f1_score, accuracy_score, precision_score, log_loss,
@@ -38,10 +39,14 @@ def display_metrics(y_true, y_pred, metrics):
     for metric in metrics:
         if metric == 'classification report':
             st.title('Classification Report')
-            st.dataframe(classification_report(y_true, y_pred, output_dict=True))
+            st.dataframe(
+                classification_report(y_true, y_pred, output_dict=True)
+            )
         else:
             metric_names.append(metric)
-            metric_values.append(functions.get(metric, wrong_metric)(y_true, y_pred))
+            metric_values.append(
+                functions.get(metric, wrong_metric)(y_true, y_pred)
+            )
     df_metrics['Metric'] = metric_names
     df_metrics['Value'] = metric_values
     st.title('Metrics')
@@ -51,6 +56,21 @@ def display_metrics(y_true, y_pred, metrics):
 
 def wrong_metric(**params):
     return '...'
+
+
+def display_params(estimator: GridSearchCV):
+    df = pd.DataFrame(
+        estimator.best_params_.items(),
+        columns=['Hyperparameter', 'Value']
+    )
+    save_params(df)
+    st.title('Best model parameters')
+    st.dataframe(df)
+
+
+def save_params(df: pd.DataFrame):
+    pass
+    df.to_csv('streamlit_ml/report/best_parameters')
 
 
 def save_metrics(df: pd.DataFrame):

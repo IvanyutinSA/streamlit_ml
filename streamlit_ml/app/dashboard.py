@@ -63,6 +63,7 @@ X_train, X_test, y_train, y_test = transform.get_train_test_split(df, dataset)
 estimator = model_evaluation.get_estimator(model)
 estimator = model_evaluation.fit(estimator, X_train, y_train, target_type, grid_params)
 y_pred = model_evaluation.predict(estimator, X_test)
-model_estimate.display_metrics(y_test, y_pred, metrics)
 
+model_estimate.display_params(estimator)
+model_estimate.display_metrics(y_test, y_pred, metrics)
 
