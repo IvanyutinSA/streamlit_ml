@@ -13,28 +13,27 @@ class RBTNode:
         self.parent = parent
         self.left = left
         self.right = right
-        self.color = colour
+        self.color = color
 
 
 class RedBlackTree:
     def __init__(self):
         self.nil = RBTNode()
+        self.nil.key = 'nil'
         self.nil.right = self.nil
         self.nil.left = self.nil
         self.nil.parent = self.nil
         self.root = self.nil
         pass
 
-    def search(self, item) -> RBTNode | None:
+    def search(self, item) -> RBTNode:
         x = self.root
-        if x != self.nil:
+        while x != self.nil and x.key != item:
             if x.key < item:
-                x = x.left
-            elif x.key == item:
-                return x
-            else:
                 x = x.right
-        return None
+            else:
+                x = x.left
+        return x
         
 
     def minimum(self, node: RBTNode | None = None) -> RBTNode:
@@ -106,6 +105,7 @@ class RedBlackTree:
         # z has 2 children
         else:
             y = self.minimum(z.right)
+            y_original_color = y.color
             x = y.right
             if y != z.right:
                 self.__transplant(y, y.right)
@@ -215,20 +215,24 @@ class RedBlackTree:
         while x != self.root and x.color == 'BLACK':
             if x == x.parent.left:
                 w = x.parent.right
+                # case 1
                 if w.color == 'RED':
                     w.color = 'BLACK'
                     x.parent.color = 'RED'
                     self.__left_rotate(x.parent)
                     w = x.parent.right
+                # case 2
                 if w.left.color == 'BLACK' and w.right.color == 'BLACK':
                     w.color = 'RED'
                     x = x.parent
                 else:
+                    # case 3
                     if w.right.color == 'BLACK':
                         w.left.color = 'BLACK'
                         w.color = 'RED'
                         self.__right_rotate(w)
                         w = x.parent.right
+                    # case 4
                     w.color = x.parent.color
                     x.parent.color = 'BLACK'
                     w.right.color = 'BLACK'
