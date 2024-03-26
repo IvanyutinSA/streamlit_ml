@@ -25,25 +25,51 @@ class RedBlackTree:
         self.root = self.nil
         pass
 
-    def search(self):
-        # exactly like in bst
-        pass
+    def search(self, item) -> RBTNode | None:
+        x = self.root
+        if x != self.nil:
+            if x.key < item:
+                x = x.left
+            elif x.key == item:
+                return x
+            else:
+                x = x.right
+        return None
+        
 
-    def minimum(self):
-        # exactly like in bst
-        pass
+    def minimum(self, node: RBTNode | None = None) -> RBTNode:
+        x = self.root if node is None else node
+        if x.left != self.nil:
+            return self.minimum(x.left)
+        else:
+            return x
 
-    def maximum(self):
-        # exactly like in bst
-        pass
+    def maximum(self, node: RBTNode | None = None) -> RBTNode:
+        x = self.root if node is None else node
+        if x.right != self.nil:
+            return self.maximum(x.right)
+        else:
+            return x
 
-    def successor(self):
-        # exactly like in bst
-        pass
+    def successor(self, x: RBTNode) -> RBTNode:
+        if x.right != self.nil:
+            return self.minimum(x.right)
+        else:
+            y = x.parent
+            while y != self.nil and x == y.right:
+                x = y
+                y = y.parent
+            return y
 
-    def predecessor(self):
-        # exactly like in bst
-        pass
+    def predecessor(self, x: RBTNode) -> RBTNode:
+        if x.left != self.nil:
+            return self.maximum(x.left)
+        else:
+            y = x.parent
+            while y != self.nil and x == y.left:
+                x = y
+                y = y.parent
+            return y
 
     def insert(self, z):
         x = self.root
@@ -185,6 +211,7 @@ class RedBlackTree:
         v.parent = u.parent
 
     def __delete_fixup(self, x: RBTNode) -> None:
+        # 352 page
         while x != self.root and x.color == 'BLACK':
             if x == x.parent.left:
                 w = x.parent.right
